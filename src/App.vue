@@ -10,23 +10,16 @@
 <script>
 
     import Content from './components/Content.vue';
-    import ColorBlock from './components/ColorBlock.vue';
-    import BlendBlock from './components/Blend.vue';
 
     export default {
         name: 'app',
         data () {
             return {
                 msg: 'Click on block to change its color.',
-                receivedColor: 'get'
             }
         },
-        methods: {
-        },
         components: {
-            'main-content': Content,
-            'my-block-component': ColorBlock,
-            'blend': BlendBlock
+            'main-content': Content
         }
     }
 

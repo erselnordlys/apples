@@ -3,7 +3,7 @@
         <ul>
 
             <my-block-component
-                    index="0" v-on:change="changeCol(0)"  v-bind:col="result[0]">
+                    index="0" v-on:change="changeCol(0)"  v-bind:col="colorsArray[colorCounter[0]]">
             </my-block-component>
 
             <my-block-component
@@ -20,8 +20,7 @@
 
         </ul>
 
-        <blend :col0="result[0]" :col1 ="result[1]" :col2="result[2]" :col3="result[3]"></blend>
-
+        <blend v-bind:pass="colorToPass"/>
     </div>
 
 </template>
@@ -29,7 +28,6 @@
 <script>
     import ColorBlock from './ColorBlock.vue';
     import BlendBlock from './Blend.vue';
-
 
     export default {
         name: 'Content',
@@ -43,11 +41,19 @@
                     3: 0
                 },
                 result: {
-                    0: 'peachpuff',
-                    1: 'peachpuff',
-                    2: 'peachpuff',
-                    3: 'peachpuff'
-                }
+                    0: [255, 218, 185],
+                    1: [255, 218, 185],
+                    2: [255, 218, 185],
+                    3: [255, 218, 185]
+                },
+                rgbMap: {
+                    peachpuff: [255, 218, 185],
+                    blue: [173, 216, 230],
+                    green: [144, 238, 144],
+                    pink: [255, 182, 193]
+                },
+                blendedCols: [255, 218, 185],
+                colorToPass: 'rgb(255, 218, 185)'
             }
         },
 
@@ -55,36 +61,61 @@
             col: String,
             index: Number,
             resultColor: Object,
-            col0: String,
-            col1: String,
-            col2: String,
-            col3: String
+            pass: String
         },
         methods: {
+
+            // перевести строку цвета в формат ргб
+            turnIntoRGB: function (index) {
+                this.result[index] = this.rgbMap[this.colorsArray[this.colorCounter[index]]];
+            },
+
+            // получить средние значения
+            getAverageNumbers: function () {
+                // i is num of color in row; j is index
+                for (var i = 0; i < 3; i++) {
+                    var sum = 0;
+
+                    for (var j = 0; j < 4; j++) {
+                        sum = sum + this.result[j][i];
+                    }
+
+                    // calculate average nums
+                    var average = (sum / 4) - ((sum / 4) % 1);
+
+                    //push nums to blendedCols
+                    this.blendedCols[i] = average;
+                }
+            },
+
             changeCol: function (num) {
 
-                this.colorCounter[num]++; // add 1 to block counter
+                // add 1 to block counter
+                this.colorCounter[num]++;
 
-                this.result[num] = this.colorsArray[this.colorCounter[num]];
-
+                // listen to counters
                 if (this.colorCounter[num] > this.colorsArray.length - 1) {
                     this.colorCounter[num] = 0;
-                    this.result[num] = this.colorsArray[this.colorCounter[num]];
-
                 }
 
-                console.log('color is: ' + this.result[num]);
-                console.log('counter: ' + this.colorCounter[num]);
+                this.turnIntoRGB(num);
+                this.getAverageNumbers();
 
+                this.colorToPass = 'rgb(' + this.blendCols[0] + ', ' + this.blendCols[1] + ', ' + this.blendCols[2] + ') ';
+            }
+        },
+
+        computed: {
+            blendCols: function () {
+                return this.blendedCols;
             }
         },
 
         components: {
-            'my-block-component': ColorBlock,
-            'blend': BlendBlock
-        }
+                'my-block-component': ColorBlock,
+                'blend': BlendBlock
+            }
     }
-
 </script>
 
 <style scoped>

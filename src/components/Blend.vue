@@ -1,70 +1,27 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 
     <ul>
-        <li><div class="button" v-on:click="blend"> {{ msg }} </div></li>
-        <!--{{ col }}-->
-
-        <li><div class="result-block" v-bind:style="{ background: result }"></div></li>
+        <div class="result-block" v-bind:style=" { background: pass} ">{{ pass }}</div>
     </ul>
 
 
-    </div>
 </template>
 
 <script>
     import myContent from './Content.vue';
+    import colorBlock from './ColorBlock.vue';
 
-    var colorsArray = [];
-    var blendedCol = [];
-    var result;
 
     export default {
         name: 'BlendBlock',
         data () {
             return {
                 msg: 'Blend colors.',
-                rgbMap: {
-                    peachpuff: [255, 218, 185],
-                    blue: [173, 216, 230],
-                    green: [144, 238, 144],
-                    pink: [255, 182, 193]
-                },
-                result: result
             }
         },
-        methods: {
-            getAllColors: function () {
-                // записать все окончательные цвета
-                colorsArray[0] = this.col0;
-                colorsArray[1] = this.col1;
-                colorsArray[2] = this.col2;
-                colorsArray[3] = this.col3;
-            },
-
-            blend: function () {
-                this.getAllColors();
-
-                // записать смешанный цвет в blendedCol
-                for (var i = 0; i < 3; i++) {
-                    blendedCol[i] = (this.rgbMap[colorsArray[0]][i] + this.rgbMap[colorsArray[1]][i]
-                        + this.rgbMap[colorsArray[2]][i] + this.rgbMap[colorsArray[3]][i]) / colorsArray.length;
-
-                    // округлить числа
-                    if (blendedCol[i] % 1 !== 0) {
-                        blendedCol[i] = blendedCol[i] - blendedCol[i] % 1;
-                    }
-                }
-
-                this.result = ' rgb(' + blendedCol[0] + ', ' + blendedCol [1] + ', ' + blendedCol[2] + ') ' ;
-
-                console.log('blended col: ' + blendedCol);
-                console.log('result: ' + this.result);
-            }
-        },
-        props: ['col0', 'col1', 'col2', 'col3'],
-
-        components: {}
+        props: ['pass']
     }
+
 </script>
 
 <style scoped>
@@ -75,7 +32,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 10px;
+        /*margin-bottom: 10px;*/
     }
 
     ul {
@@ -90,11 +47,9 @@
         height: 40px;
         background: whitesmoke;
         cursor: pointer;
-
     }
 
     .result-block {
-        height: 144px;
-        background: rgb(255, 255, 255);
+        height: 196px;
     }
 </style>
