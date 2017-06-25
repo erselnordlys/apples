@@ -19,8 +19,8 @@
             </my-block-component>
 
         </ul>
-
-        <blend v-bind:pass="colorToPass"/>
+        
+        <blend v-bind:pass='blendCols'></blend>
     </div>
 
 </template>
@@ -53,15 +53,7 @@
                     pink: [255, 182, 193]
                 },
                 blendedCols: [255, 218, 185],
-                colorToPass: 'rgb(255, 218, 185)'
             }
-        },
-
-        props: {
-            col: String,
-            index: Number,
-            resultColor: Object,
-            pass: String
         },
         methods: {
 
@@ -90,31 +82,23 @@
 
             changeCol: function (num) {
 
-                // add 1 to block counter
-                this.colorCounter[num]++;
-
-                // listen to counters
-                if (this.colorCounter[num] > this.colorsArray.length - 1) {
-                    this.colorCounter[num] = 0;
-                }
-
+                this.colorCounter[num] = (this.colorCounter[num] + 1) % this.colorsArray.length;
                 this.turnIntoRGB(num);
-                this.getAverageNumbers();
-
-                this.colorToPass = 'rgb(' + this.blendCols[0] + ', ' + this.blendCols[1] + ', ' + this.blendCols[2] + ') ';
             }
         },
 
         computed: {
             blendCols: function () {
-                return this.blendedCols;
+                // TODO: тут вычисляется смешанный цвет на основе results
+                this.getAverageNumbers();
+                return [this.blendedCols[0], this.blendedCols[1], this.blendedCols[2]];
             }
         },
 
         components: {
-                'my-block-component': ColorBlock,
-                'blend': BlendBlock
-            }
+            'my-block-component': ColorBlock,
+            'blend': BlendBlock
+        }
     }
 </script>
 

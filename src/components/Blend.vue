@@ -1,7 +1,7 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 
     <ul>
-        <div class="result-block" v-bind:style=" { background: pass} ">{{ pass }}</div>
+        <div class="result-block" v-bind:style=" { background: getColor} ">{{ pass }}</div>
     </ul>
 
 
@@ -16,10 +16,15 @@
         name: 'BlendBlock',
         data () {
             return {
-                msg: 'Blend colors.',
+                msg: 'Blend colors.'
             }
         },
-        props: ['pass']
+        props: ['pass'],
+        computed: {
+          getColor: function () {
+              return ('rgb(' + this.pass[0] + ', ' + this.pass[1] + ', ' + this.pass[2] + ')');
+          }
+        }
     }
 
 </script>
